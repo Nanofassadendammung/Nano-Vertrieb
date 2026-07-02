@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<title>Nano-Vertriebstool – Testfälle (Abschnitt 6, Schritt 7)</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 820px; margin: 40px auto; color: #1f2933; }
+  h1 { color: #0b4f8a; }
+  .case { border: 1px solid #d7dee8; border-radius: 4px; padding: 12px 16px; margin-bottom: 10px; }
+  .case.pass { border-left: 6px solid #10b981; }
+  .case.fail { border-left: 6px solid #b91c1c; background: #fdecea; }
+  .case h3 { margin: 0 0 6px; font-size: 15px; }
+  .case pre { font-size: 12px; background: #f6f8fa; padding: 8px; overflow-x: auto; }
+  #summary { font-weight: bold; font-size: 18px; margin: 20px 0; }
+  /* App-DOM wird für den Import/Export-Testfall real gebootet, aber unsichtbar gehalten. */
+  #app { position: absolute; left: -99999px; top: -99999px; }
+</style>
+</head>
+<body>
+  <h1>Nano-Vertriebstool – Testfälle (Plan Abschnitt 6, Schritt 7)</h1>
+  <div id="summary">Läuft…</div>
+  <div id="results"></div>
+
+  <div id="app">
+    <button id="save-icon"></button>
+    <input type="file" id="json-upload-input" hidden />
+    <div id="slides-container">
+      <section class="slide" id="slide-titel" data-slide-id="titel">
+        <input id="kunde-name"><input id="kunde-objekt">
+        <input id="rech-name"><input id="rech-strasse"><input id="rech-plz"><input id="rech-ort"><input id="rech-land">
+        <input id="liefer-name"><input id="liefer-strasse"><input id="liefer-plz"><input id="liefer-ort"><input id="liefer-land">
+        <input type="checkbox" id="liefer-wie-rechnung" checked><div id="liefer-adresse-felder"></div>
+        <button id="btn-angebot-laden"></button><div id="dropzone-titel"></div>
+      </section>
+      <section class="slide" id="slide-problem" data-slide-id="problem"><div id="problem-cards"></div></section>
+      <section class="slide" id="slide-loesung" data-slide-id="loesung"><div id="kenndaten-grid"></div></section>
+      <section class="slide" id="slide-uwert" data-slide-id="uwert"><div id="uwert-chart"></div><div id="uwert-footnote"></div></section>
+      <section class="slide" id="slide-systeme" data-slide-id="systeme"><div id="systeme-cards"></div></section>
+      <section class="slide" id="slide-ablauf" data-slide-id="ablauf"><div id="ablauf-steps"></div></section>
+      <section class="slide" id="slide-b-fassade" data-slide-id="b-fassade" data-system="fassade">
+        <input id="fassade-flaeche" type="number"><select id="fassade-untergrund"></select>
+        <textarea id="fassade-hinweis"></textarea><input type="checkbox" id="fassade-vornach" checked>
+        <div id="fassade-live"></div>
+        <input type="radio" name="fassade-farben-ja" value="ja"><input type="radio" name="fassade-farben-ja" value="nein" checked>
+        <div id="fassade-farben-anzahl-wrap"><input id="fassade-farben-anzahl" type="number"></div>
+        <input type="radio" name="fassade-schaeden-ja" value="ja"><input type="radio" name="fassade-schaeden-ja" value="nein" checked>
+        <div id="fassade-schaeden-desc-wrap"><input id="fassade-schaeden-desc"></div>
+        <input type="radio" name="fassade-geruest-art" value="Nein" checked><input type="radio" name="fassade-geruest-art" value="Gerüst"><input type="radio" name="fassade-geruest-art" value="Steiger">
+        <div id="fassade-geruest-m2-wrap"><input id="fassade-geruest-m2" type="number"></div>
+        <input id="fassade-geschosse"><input type="checkbox" id="fassade-zugang-frei" checked>
+      </section>
+      <section class="slide" id="slide-b-innen" data-slide-id="b-innen" data-system="innen">
+        <input id="innen-flaeche" type="number"><select id="innen-untergrund"></select>
+        <textarea id="innen-hinweis"></textarea><input type="checkbox" id="innen-vornach" checked>
+        <div id="innen-live"></div>
+        <input type="radio" name="innen-bewohnt" value="ja" checked><input type="radio" name="innen-bewohnt" value="nein">
+        <select id="innen-zugaenglich"><option value="ja">ja</option></select>
+        <input type="checkbox" id="innen-decken">
+        <input type="radio" name="innen-feuchte-ja" value="ja"><input type="radio" name="innen-feuchte-ja" value="nein" checked>
+        <div id="innen-feuchte-desc-wrap"><input id="innen-feuchte-desc"></div>
+        <input type="radio" name="innen-geruest-art" value="Nein" checked><input type="radio" name="innen-geruest-art" value="Gerüst"><input type="radio" name="innen-geruest-art" value="Steiger">
+        <div id="innen-geruest-m2-wrap"><input id="innen-geruest-m2" type="number"></div>
+      </section>
+      <section class="slide" id="slide-b-dach" data-slide-id="b-dach" data-system="dach">
+        <input id="dach-flaeche" type="number"><select id="dach-untergrund"></select>
+        <textarea id="dach-hinweis"></textarea><input type="checkbox" id="dach-vornach" checked>
+        <div id="dach-live"></div>
+        <input type="radio" name="dach-form" value="Flachdach" checked><input type="radio" name="dach-form" value="geneigt">
+        <input type="radio" name="dach-zugang" value="Nein" checked><input type="radio" name="dach-zugang" value="Gerüst"><input type="radio" name="dach-zugang" value="Steiger"><input type="radio" name="dach-zugang" value="PSA">
+        <div id="dach-geruest-m2-wrap"><input id="dach-geruest-m2" type="number"></div>
+        <div id="dach-psa-hinweis"></div>
+        <input type="radio" name="dach-aufbauten-frei" value="ja" checked><input type="radio" name="dach-aufbauten-frei" value="nein">
+        <div id="dach-aufbauten-hinweis-wrap"><input id="dach-aufbauten-hinweis"></div>
+      </section>
+      <section class="slide" id="slide-b-boden" data-slide-id="b-boden" data-system="boden">
+        <input id="boden-flaeche" type="number"><select id="boden-untergrund"></select>
+        <textarea id="boden-hinweis"></textarea><input type="checkbox" id="boden-vornach" checked>
+        <div id="boden-live"></div>
+        <select id="boden-nutzung"><option value="Wohnen">Wohnen</option></select>
+        <input type="radio" name="boden-geraeumt" value="ja" checked><input type="radio" name="boden-geraeumt" value="nein">
+        <input type="radio" name="boden-feuchte-ja" value="ja"><input type="radio" name="boden-feuchte-ja" value="nein" checked>
+      </section>
+      <section class="slide" id="slide-b-industrie" data-slide-id="b-industrie" data-system="industrie">
+        <input id="industrie-flaeche" type="number"><select id="industrie-untergrund"></select>
+        <textarea id="industrie-hinweis"></textarea><input type="checkbox" id="industrie-vornach" checked>
+        <div id="industrie-live"></div>
+        <select id="industrie-anwendung"><option value="Halle/Gebäudehülle">Halle</option></select>
+        <input type="radio" name="industrie-temp-ja" value="ja"><input type="radio" name="industrie-temp-ja" value="nein" checked>
+        <div id="industrie-temp-desc-wrap"><input id="industrie-temp-desc"></div>
+        <select id="industrie-ausfuehrung"><option value="laufender Betrieb">lb</option></select>
+        <input type="radio" name="industrie-geruest-art" value="Nein" checked><input type="radio" name="industrie-geruest-art" value="Gerüst"><input type="radio" name="industrie-geruest-art" value="Steiger">
+        <div id="industrie-geruest-m2-wrap"><input id="industrie-geruest-m2" type="number"></div>
+      </section>
+      <section class="slide" id="slide-angebot" data-slide-id="angebot">
+        <div id="import-banner"></div>
+        <div id="angebot-rech-adresse"></div><div id="angebot-liefer-adresse"></div>
+        <div id="angebot-positionen"></div><div id="angebot-summen"></div><div id="angebot-zahlungsplan"></div>
+      </section>
+      <section class="slide" id="slide-abschluss" data-slide-id="abschluss">
+        <div id="abschluss-summary"></div>
+        <button id="btn-json-download"></button><button id="btn-json-upload-abschluss"></button>
+        <button id="btn-print"></button><button id="btn-neu-starten"></button>
+      </section>
+    </div>
+    <nav>
+      <button id="btn-zurueck"></button><div id="slide-dots"></div><button id="btn-weiter"></button>
+    </nav>
+  </div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="tests.js"></script>
+</body>
+</html>

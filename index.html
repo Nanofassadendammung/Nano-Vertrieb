@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nano-Vertriebstool – Nanofassadendämmung / PSCoat</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="app">
+
+  <button id="save-icon" class="save-icon no-print" title="Zwischenstand sichern" aria-label="Zwischenstand sichern">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></svg>
+  </button>
+
+  <input type="file" id="json-upload-input" accept="application/json" hidden />
+
+  <div id="slides-container">
+
+    <!-- ===================== TEIL A – VERKAUFSSTRECKE ===================== -->
+
+    <!-- 1. Titel/Hook -->
+    <section class="slide" id="slide-titel" data-slide-id="titel">
+      <div class="slide-inner">
+        <div class="brand-row">
+          <img src="assets/logo-nano.svg" alt="NANO Fassadendämmung" />
+          <img src="assets/logo-pscoat.svg" alt="PScoat – Power Smart Coat" />
+        </div>
+        <h1>Dämmen in Millimetern</h1>
+        <p class="muted" style="font-size:18px;max-width:60ch;">Nanobeschichtung für Fassade, Innenraum, Dach, Boden und Industrie.</p>
+
+        <div class="field-row" style="margin-top:var(--space-6);">
+          <div class="field">
+            <label for="kunde-name">Kunde</label>
+            <input type="text" id="kunde-name" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="kunde-objekt">Objekt</label>
+            <input type="text" id="kunde-objekt" autocomplete="off" />
+          </div>
+        </div>
+
+        <div class="address-grid">
+          <div class="address-block card">
+            <h4>Rechnungsadresse</h4>
+            <div class="field"><label for="rech-name">Name</label><input type="text" id="rech-name" /></div>
+            <div class="field"><label for="rech-strasse">Straße + Nr.</label><input type="text" id="rech-strasse" /></div>
+            <div class="field-row">
+              <div class="field"><label for="rech-plz">PLZ</label><input type="text" id="rech-plz" /></div>
+              <div class="field"><label for="rech-ort">Ort</label><input type="text" id="rech-ort" /></div>
+            </div>
+            <div class="field"><label for="rech-land">Land</label><input type="text" id="rech-land" value="Deutschland" /></div>
+          </div>
+
+          <div class="address-block card">
+            <h4>Liefer- und Ausführungsadresse</h4>
+            <div class="address-toggle">
+              <input type="checkbox" id="liefer-wie-rechnung" checked />
+              <label for="liefer-wie-rechnung">Lieferadresse = Rechnungsadresse</label>
+            </div>
+            <div id="liefer-adresse-felder" hidden>
+              <div class="field"><label for="liefer-name">Name</label><input type="text" id="liefer-name" /></div>
+              <div class="field"><label for="liefer-strasse">Straße + Nr.</label><input type="text" id="liefer-strasse" /></div>
+              <div class="field-row">
+                <div class="field"><label for="liefer-plz">PLZ</label><input type="text" id="liefer-plz" /></div>
+                <div class="field"><label for="liefer-ort">Ort</label><input type="text" id="liefer-ort" /></div>
+              </div>
+              <div class="field"><label for="liefer-land">Land</label><input type="text" id="liefer-land" value="Deutschland" /></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:var(--space-5);">
+          <button class="btn no-print" id="btn-angebot-laden">Angebot laden</button>
+          <span class="muted" style="font-size:12px;margin-left:8px;">JSON-Datei hochladen oder auf diese Fläche ziehen</span>
+          <div class="dropzone no-print" id="dropzone-titel">Zwischenstand (JSON) hierher ziehen</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Das Problem -->
+    <section class="slide" id="slide-problem" data-slide-id="problem">
+      <div class="slide-inner">
+        <p class="eyebrow">Ausgangslage</p>
+        <h2>Warum jetzt handeln?</h2>
+        <div class="card-grid" id="problem-cards"></div>
+      </div>
+    </section>
+
+    <!-- 3. Die Lösung – Physik, die überzeugt -->
+    <section class="slide" id="slide-loesung" data-slide-id="loesung">
+      <div class="slide-inner">
+        <p class="eyebrow">Die Lösung</p>
+        <h2>Physik, die überzeugt</h2>
+        <p>Die Nanobeschichtung PSCoat wird in nur drei dünnen Schichten aufgetragen und ersetzt klassische Dämmstärken durch physikalische Wirksamkeit im Millimeterbereich.</p>
+
+        <div style="display:flex; gap:var(--space-6); flex-wrap:wrap; align-items:flex-start; margin-top:var(--space-5);">
+          <div style="flex:1 1 260px;">
+            <svg viewBox="0 0 220 260" width="220" height="260" role="img" aria-label="Wand-Querschnitt: Grundierung, Funktionsschicht, Abschlussschicht">
+              <rect x="10" y="10" width="80" height="240" fill="#cfd8e3" stroke="#9aa7b5"/>
+              <text x="50" y="135" text-anchor="middle" font-size="11" fill="#334155" transform="rotate(-90 50 135)">Bestandsbauteil</text>
+              <rect x="90" y="10" width="14" height="240" fill="#0b4f8a"/>
+              <rect x="104" y="10" width="14" height="240" fill="#16b8d4"/>
+              <rect x="118" y="10" width="14" height="240" fill="#10b981"/>
+              <text x="97" y="262" font-size="9" text-anchor="middle" fill="#334155">Grund.</text>
+              <text x="111" y="262" font-size="9" text-anchor="middle" fill="#334155">Funkt.</text>
+              <text x="125" y="262" font-size="9" text-anchor="middle" fill="#334155">Abschl.</text>
+            </svg>
+          </div>
+          <div style="flex:2 1 340px;">
+            <div class="steps">
+              <div class="step"><div class="n">1</div>Grundierung<br /><span class="muted">PSC 250 T Basic (A/B)</span></div>
+              <div class="step"><div class="n">2</div>Funktionsschicht<br /><span class="muted">PSC 250 T BUILD / HP</span></div>
+              <div class="step"><div class="n">3</div>Abschlussschicht<br /><span class="muted">ECO / ECI / ECR / ECF</span></div>
+            </div>
+
+            <div class="kenndaten-grid" id="kenndaten-grid"></div>
+            <p class="muted" style="font-size:12.5px;">Angaben lt. Hersteller (Techn. Datenblatt).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. U-Wert-Vergleich -->
+    <section class="slide" id="slide-uwert" data-slide-id="uwert">
+      <div class="slide-inner">
+        <p class="eyebrow">Stärkstes Argument</p>
+        <h2>U-Wert-Vergleich</h2>
+        <div class="uwert-chart" id="uwert-chart"></div>
+        <div class="uwert-footnote" id="uwert-footnote"></div>
+        <div class="card-grid" style="margin-top:var(--space-5);">
+          <div class="card"><h3>25 Jahre</h3><p class="muted">Herstellergarantie auf die Dämmfunktion</p></div>
+          <div class="card"><h3>5 Jahre</h3><p class="muted">gesetzliche Gewährleistung</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Die fünf Systeme im Überblick -->
+    <section class="slide" id="slide-systeme" data-slide-id="systeme">
+      <div class="slide-inner">
+        <p class="eyebrow">Systemauswahl</p>
+        <h2>Die fünf Systeme im Überblick</h2>
+        <p class="muted">Wählen Sie gemeinsam mit dem Kunden die passenden Systeme – jede Auswahl öffnet die zugehörige Kalkulationsseite.</p>
+        <div class="card-grid" id="systeme-cards"></div>
+      </div>
+    </section>
+
+    <!-- 6. Ablauf, Förderung & Sicherheit -->
+    <section class="slide" id="slide-ablauf" data-slide-id="ablauf">
+      <div class="slide-inner">
+        <p class="eyebrow">So geht es weiter</p>
+        <h2>Ablauf, Förderung &amp; Sicherheit</h2>
+        <div class="steps" id="ablauf-steps"></div>
+
+        <div class="card-grid" style="margin-top:var(--space-5);">
+          <div class="card">
+            <h3>Zahlungsplan</h3>
+            <p class="muted">60 % Anzahlung Material · 20 % Terminbestätigung · 20 % nach Abnahme</p>
+          </div>
+          <div class="card">
+            <h3>Fördervorbehalt</h3>
+            <p class="muted">BEG-Förderung möglich (BAFA/KfW) – § 19 AGB.</p>
+          </div>
+        </div>
+
+        <div style="margin-top:var(--space-6); text-align:center;">
+          <button class="btn btn--cta" id="btn-cta-kalkulieren">Jetzt gemeinsam kalkulieren →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== TEIL B – KALKULATIONSSLIDES ===================== -->
+
+    <!-- B1 Fassade -->
+    <section class="slide" id="slide-b-fassade" data-slide-id="b-fassade" data-system="fassade">
+      <div class="slide-inner">
+        <p class="eyebrow">Kalkulation</p>
+        <h2>NanoFASSADENdämmung</h2>
+
+        <div class="field-row">
+          <div class="field"><label for="fassade-flaeche">Fläche (m²)</label><input type="number" min="0.01" step="0.01" id="fassade-flaeche" /></div>
+          <div class="field">
+            <label for="fassade-untergrund">Untergrund</label>
+            <select id="fassade-untergrund"></select>
+          </div>
+        </div>
+
+        <div class="field"><label for="fassade-hinweis">Hinweis / Bemerkung</label><textarea id="fassade-hinweis"></textarea></div>
+
+        <div class="checkbox-field">
+          <input type="checkbox" id="fassade-vornach" checked />
+          <label for="fassade-vornach">Vor-/Nachbereitung Untergrund (25,21 €/m²)</label>
+        </div>
+
+        <div class="live-calc" id="fassade-live"></div>
+
+        <fieldset>
+          <legend>Farben &amp; Untergrund</legend>
+          <div class="field-row">
+            <div>
+              <p style="font-weight:700;font-size:14px;margin-bottom:6px;">Weitere Farben gewünscht?</p>
+              <div class="radio-row">
+                <label><input type="radio" name="fassade-farben-ja" value="ja" /> Ja</label>
+                <label><input type="radio" name="fassade-farben-ja" value="nein" checked /> Nein</label>
+              </div>
+              <div class="field" id="fassade-farben-anzahl-wrap" hidden style="margin-top:8px;">
+                <label for="fassade-farben-anzahl">Anzahl Zusatzfarben (1–3)</label>
+                <input type="number" min="1" max="3" step="1" id="fassade-farben-anzahl" value="1" />
+              </div>
+              <p class="muted" style="font-size:12px;">Standard ist Weiß #FDFDFD; bis zu 3 Zusatzfarben über die Pauschale (§ 4 AGB).</p>
+            </div>
+            <div>
+              <p style="font-weight:700;font-size:14px;margin-bottom:6px;">Beschädigungen am Untergrund?</p>
+              <div class="radio-row">
+                <label><input type="radio" name="fassade-schaeden-ja" value="ja" /> Ja</label>
+                <label><input type="radio" name="fassade-schaeden-ja" value="nein" checked /> Nein</label>
+              </div>
+              <div class="field" id="fassade-schaeden-desc-wrap" hidden style="margin-top:8px;">
+                <label for="fassade-schaeden-desc">Kurzbeschreibung</label>
+                <input type="text" id="fassade-schaeden-desc" />
+              </div>
+              <p class="muted" style="font-size:12px;">Kleinschäden bis 10 cm²/Stelle und max. 2 % der Fläche in der Pauschale enthalten; größere Schäden gesondert (§ 5 AGB).</p>
+            </div>
+          </div>
+          <p class="muted" id="fassade-pauschale-hinweis" style="font-size:12.5px;"></p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Gerüst / Steiger &amp; Zugang</legend>
+          <p style="font-weight:700;font-size:14px;margin-bottom:6px;">Gerüst oder Steiger erforderlich?</p>
+          <div class="radio-row">
+            <label><input type="radio" name="fassade-geruest-art" value="Nein" checked /> Nein</label>
+            <label><input type="radio" name="fassade-geruest-art" value="Gerüst" /> Gerüst</label>
+            <label><input type="radio" name="fassade-geruest-art" value="Steiger" /> Steiger</label>
+          </div>
+          <div class="field" id="fassade-geruest-m2-wrap" hidden style="margin-top:8px;max-width:220px;">
+            <label for="fassade-geruest-m2">Fläche Gerüst/Steiger (m²)</label>
+            <input type="number" min="0" step="0.01" id="fassade-geruest-m2" />
+          </div>
+
+          <div class="field-row" style="margin-top:var(--space-3);">
+            <div class="field"><label for="fassade-geschosse">Gebäudehöhe / Geschosse</label><input type="text" id="fassade-geschosse" /></div>
+          </div>
+          <div class="checkbox-field">
+            <input type="checkbox" id="fassade-zugang-frei" checked />
+            <label for="fassade-zugang-frei">Zugang rund ums Gebäude frei (keine Fahrzeuge/Pflanzen/Anbauten, § 11 AGB)</label>
+          </div>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- B2 Innen -->
+    <section class="slide" id="slide-b-innen" data-slide-id="b-innen" data-system="innen">
+      <div class="slide-inner">
+        <p class="eyebrow">Kalkulation</p>
+        <h2>NanoINNENdämmung</h2>
+
+        <div class="field-row">
+          <div class="field"><label for="innen-flaeche">Fläche (m²)</label><input type="number" min="0.01" step="0.01" id="innen-flaeche" /></div>
+          <div class="field">
+            <label for="innen-untergrund">Untergrund</label>
+            <select id="innen-untergrund"></select>
+          </div>
+        </div>
+
+        <div class="field"><label for="innen-hinweis">Hinweis / Bemerkung</label><textarea id="innen-hinweis"></textarea></div>
+
+        <div class="checkbox-field">
+          <input type="checkbox" id="innen-vornach" checked />
+          <label for="innen-vornach">Vor-/Nachbereitung Untergrund (25,21 €/m²)</label>
+        </div>
+
+        <div class="live-calc" id="innen-live"></div>
+
+        <fieldset>
+          <legend>Rahmenbedingungen</legend>
+          <div class="field-row">
+            <div>
+              <p style="font-weight:700;font-size:14px;margin-bottom:6px;">Räume bewohnt?</p>
+              <div class="radio-row">
+                <label><input type="radio" name="innen-bewohnt" value="ja" checked /> Ja</label>
+                <label><input type="radio" name="innen-bewohnt" value="nein" /> Nein</label>
+              </div>
+            </div>
+            <div>
+              <label for="innen-zugaenglich">Flächen frei zugänglich / ausgeräumt?</label>
+              <select id="innen-zugaenglich">
+                <option value="ja">Ja</option>
+                <option value="teilweise">Teilweise</option>
+                <option value="nein">Nein</option>
+              </select>
+            </div>
+          </div>
+          <p class="muted" style="font-size:12px;">§ 11 AGB: Heizkörper, Steckdosenabdeckungen etc. müssen bauseitig entfernt sein; bei Deckenbeschichtung Bodenfläche freiräumen.</p>
+
+          <div class="checkbox-field" style="margin-top:var(--space-3);">
+            <input type="checkbox" id="innen-decken" />
+            <label for="innen-decken">Auch Deckenflächen</label>
+          </div>
+
+          <p style="font-weight:700;font-size:14px;margin-bottom:6px;">Feuchte-/Schimmelproblematik bekannt?</p>
+          <div class="radio-row">
+            <label><input type="radio" name="innen-feuchte-ja" value="ja" /> Ja</label>
+            <label><input type="radio" name="innen-feuchte-ja" value="nein" checked /> Nein</label>
+          </div>
+          <div class="field" id="innen-feuchte-desc-wrap" hidden style="margin-top:8px;">
+            <label for="innen-feuchte-desc">Freitext</label>
+            <input type="text" id="innen-feuchte-desc" />
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Gerüst / Arbeitsbühne (optional)</legend>
+          <div class="radio-row">
+            <label><input type="radio" name="innen-geruest-art" value="Nein" checked /> Nein</label>
+            <label><input type="radio" name="innen-geruest-art" value="Gerüst" /> Gerüst</label>
+            <label><input type="radio" name="innen-geruest-art" value="Steiger" /> Steiger / Arbeitsbühne</label>
+          </div>
+          <div class="field" id="innen-geruest-m2-wrap" hidden style="margin-top:8px;max-width:220px;">
+            <label for="innen-geruest-m2">Fläche (m²)</label>
+            <input type="number" min="0" step="0.01" id="innen-geruest-m2" />
+          </div>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- B3 Dach -->
+    <section class="slide" id="slide-b-dach" data-slide-id="b-dach" data-system="dach">
+      <div class="slide-inner">
+        <p class="eyebrow">Kalkulation</p>
+        <h2>NanoDACHdämmung</h2>
+
+        <div class="field-row">
+          <div class="field"><label for="dach-flaeche">Fläche (m²)</label><input type="number" min="0.01" step="0.01" id="dach-flaeche" /></div>
+          <div class="field">
+            <label for="dach-untergrund">Untergrund</label>
+            <select id="dach-untergrund"></select>
+          </div>
+        </div>
+
+        <div class="field"><label for="dach-hinweis">Hinweis / Bemerkung</label><textarea id="dach-hinweis"></textarea></div>
+
+        <div class="checkbox-field">
+          <input type="checkbox" id="dach-vornach" checked />
+          <label for="dach-vornach">Vor-/Nachbereitung Untergrund (25,21 €/m²)</label>
+        </div>
+
+        <div class="live-calc" id="dach-live"></div>
+
+        <fieldset>
+          <legend>Dachform &amp; Zugang</legend>
+          <p style="font-weight:700;font-size:14px;margin-bottom:6px;">Dachform</p>
+          <div class="radio-row">
+            <label><input type="radio" name="dach-form" value="Flachdach" checked /> Flachdach</label>
+            <label><input type="radio" name="dach-form" value="geneigt" /> geneigt</label>
+          </div>
+
+          <p style="font-weight:700;font-size:14px;margin:var(--space-3) 0 6px;">Zugang: Gerüst / Steiger / PSA erforderlich?</p>
+          <div class="radio-row">
+            <label><input type="radio" name="dach-zugang" value="Nein" checked /> Nein</label>
+            <label><input type="radio" name="dach-zugang" value="Gerüst" /> Gerüst</label>
+            <label><input type="radio" name="dach-zugang" value="Steiger" /> Steiger</label>
+            <label><input type="radio" name="dach-zugang" value="PSA" /> PSA</label>
+          </div>
+          <div class="field" id="dach-geruest-m2-wrap" hidden style="margin-top:8px;max-width:220px;">
+            <label for="dach-geruest-m2">Fläche Gerüst/Steiger (m²)</label>
+            <input type="number" min="0" step="0.01" id="dach-geruest-m2" />
+          </div>
+          <p class="muted" id="dach-psa-hinweis" hidden style="font-size:12px;">PSA wird gesondert angeboten (§ 3 AGB) und ist hier nur als Hinweis erfasst.</p>
+
+          <div style="margin-top:var(--space-3);">
+            <p style="font-weight:700;font-size:14px;margin-bottom:6px;">Dachfläche frei von Aufbauten (PV, Klima)?</p>
+            <div class="radio-row">
+              <label><input type="radio" name="dach-aufbauten-frei" value="ja" checked /> Ja</label>
+              <label><input type="radio" name="dach-aufbauten-frei" value="nein" /> Nein</label>
+            </div>
+            <div class="field" id="dach-aufbauten-hinweis-wrap" hidden style="margin-top:8px;">
+              <label for="dach-aufbauten-hinweis">Hinweis</label>
+              <input type="text" id="dach-aufbauten-hinweis" />
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- B4 Boden -->
+    <section class="slide" id="slide-b-boden" data-slide-id="b-boden" data-system="boden">
+      <div class="slide-inner">
+        <p class="eyebrow">Kalkulation</p>
+        <h2>NanoBODENdämmung</h2>
+
+        <div class="field-row">
+          <div class="field"><label for="boden-flaeche">Fläche (m²)</label><input type="number" min="0.01" step="0.01" id="boden-flaeche" /></div>
+          <div class="field">
+            <label for="boden-untergrund">Untergrund</label>
+            <select id="boden-untergrund"></select>
+          </div>
+        </div>
+
+        <div class="field"><label for="boden-hinweis">Hinweis / Bemerkung</label><textarea id="boden-hinweis"></textarea></div>
+
+        <div class="checkbox-field">
+          <input type="checkbox" id="boden-vornach" checked />
+          <label for="boden-vornach">Vor-/Nachbereitung Untergrund (25,21 €/m²)</label>
+        </div>
+
+        <div class="live-calc" id="boden-live"></div>
+
+        <fieldset>
+          <legend>Nutzung &amp; Zugänglichkeit</legend>
+          <label for="boden-nutzung">Nutzung</label>
+          <select id="boden-nutzung">
+            <option value="Wohnen">Wohnen</option>
+            <option value="Keller">Keller</option>
+            <option value="Garage">Garage</option>
+            <option value="Gewerbe">Gewerbe</option>
+          </select>
+
+          <p style="font-weight:700;font-size:14px;margin:var(--space-3) 0 6px;">Fläche geräumt, Sperrung während Ausführung möglich?</p>
+          <div class="radio-row">
+            <label><input type="radio" name="boden-geraeumt" value="ja" checked /> Ja</label>
+            <label><input type="radio" name="boden-geraeumt" value="nein" /> Nein</label>
+          </div>
+
+          <p style="font-weight:700;font-size:14px;margin:var(--space-3) 0 6px;">Feuchtigkeit/Restfeuchte bekannt?</p>
+          <div class="radio-row">
+            <label><input type="radio" name="boden-feuchte-ja" value="ja" /> Ja</label>
+            <label><input type="radio" name="boden-feuchte-ja" value="nein" checked /> Nein</label>
+          </div>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- B5 Industrie -->
+    <section class="slide" id="slide-b-industrie" data-slide-id="b-industrie" data-system="industrie">
+      <div class="slide-inner">
+        <p class="eyebrow">Kalkulation</p>
+        <h2>NanoINDUSTRIEdämmung (1 mm)</h2>
+
+        <div class="field-row">
+          <div class="field"><label for="industrie-flaeche">Fläche (m²)</label><input type="number" min="0.01" step="0.01" id="industrie-flaeche" /></div>
+          <div class="field">
+            <label for="industrie-untergrund">Untergrund</label>
+            <select id="industrie-untergrund"></select>
+          </div>
+        </div>
+
+        <div class="field"><label for="industrie-hinweis">Hinweis / Bemerkung</label><textarea id="industrie-hinweis"></textarea></div>
+
+        <div class="checkbox-field">
+          <input type="checkbox" id="industrie-vornach" checked />
+          <label for="industrie-vornach">Vor-/Nachbereitung Untergrund (25,21 €/m²)</label>
+        </div>
+
+        <div class="live-calc" id="industrie-live"></div>
+
+        <fieldset>
+          <legend>Anwendung &amp; Betrieb</legend>
+          <label for="industrie-anwendung">Art der Anwendung</label>
+          <select id="industrie-anwendung">
+            <option value="Halle/Gebäudehülle">Halle/Gebäudehülle</option>
+            <option value="Anlagen- bzw. Behälterflächen">Anlagen- bzw. Behälterflächen</option>
+            <option value="Rohrleitungen">Rohrleitungen</option>
+            <option value="Sonstiges">Sonstiges</option>
+          </select>
+
+          <p style="font-weight:700;font-size:14px;margin:var(--space-3) 0 6px;">Betriebstemperatur der Flächen relevant?</p>
+          <div class="radio-row">
+            <label><input type="radio" name="industrie-temp-ja" value="ja" /> Ja</label>
+            <label><input type="radio" name="industrie-temp-ja" value="nein" checked /> Nein</label>
+          </div>
+          <div class="field" id="industrie-temp-desc-wrap" hidden style="margin-top:8px;">
+            <label for="industrie-temp-desc">Freitext (z. B. heiße Oberflächen)</label>
+            <input type="text" id="industrie-temp-desc" />
+          </div>
+
+          <label for="industrie-ausfuehrung" style="margin-top:var(--space-3);display:block;">Ausführung im laufenden Betrieb / Anlagenstillstand erforderlich?</label>
+          <select id="industrie-ausfuehrung">
+            <option value="laufender Betrieb">laufender Betrieb</option>
+            <option value="Stillstand">Stillstand</option>
+            <option value="abschnittsweise">abschnittsweise</option>
+          </select>
+        </fieldset>
+
+        <fieldset>
+          <legend>Zugang</legend>
+          <p style="font-weight:700;font-size:14px;margin-bottom:6px;">Gerüst / Steiger erforderlich?</p>
+          <div class="radio-row">
+            <label><input type="radio" name="industrie-geruest-art" value="Nein" checked /> Nein</label>
+            <label><input type="radio" name="industrie-geruest-art" value="Gerüst" /> Gerüst</label>
+            <label><input type="radio" name="industrie-geruest-art" value="Steiger" /> Steiger</label>
+          </div>
+          <div class="field" id="industrie-geruest-m2-wrap" hidden style="margin-top:8px;max-width:220px;">
+            <label for="industrie-geruest-m2">Fläche (m²)</label>
+            <input type="number" min="0" step="0.01" id="industrie-geruest-m2" />
+          </div>
+          <p class="muted" style="font-size:12px;">PSA wird gesondert angeboten (§ 3 AGB) und ist hier nur als Hinweis erfasst.</p>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- ===================== TEIL C – ANGEBOT & EXPORT ===================== -->
+
+    <!-- 7. Angebotsübersicht -->
+    <section class="slide" id="slide-angebot" data-slide-id="angebot">
+      <div class="slide-inner">
+        <div id="import-banner" class="import-banner no-print" hidden></div>
+        <p class="eyebrow">Kostenvoranschlag</p>
+        <h2>Angebotsübersicht</h2>
+
+        <div class="address-grid">
+          <div class="address-block">
+            <h4>Rechnungsadresse</h4>
+            <div id="angebot-rech-adresse"></div>
+          </div>
+          <div class="address-block">
+            <h4>Liefer- und Ausführungsadresse</h4>
+            <div id="angebot-liefer-adresse"></div>
+          </div>
+        </div>
+
+        <table class="offer-table">
+          <thead>
+            <tr><th>Pos.</th><th>Bezeichnung</th><th>Menge</th><th>Einzelpreis</th><th>Gesamt (netto)</th></tr>
+          </thead>
+          <tbody id="angebot-positionen"></tbody>
+        </table>
+
+        <div class="summary-block" id="angebot-summen"></div>
+
+        <h3 style="margin-top:var(--space-6);">Zahlungsplan</h3>
+        <div class="payment-plan" id="angebot-zahlungsplan"></div>
+      </div>
+    </section>
+
+    <!-- 8. Abschluss -->
+    <section class="slide" id="slide-abschluss" data-slide-id="abschluss">
+      <div class="slide-inner">
+        <p class="eyebrow">Zusammenfassung</p>
+        <h2>Abschluss</h2>
+        <div class="card-grid" id="abschluss-summary"></div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:var(--space-3); margin-top:var(--space-6);" class="no-print">
+          <button class="btn btn--primary" id="btn-json-download">Angebot als JSON herunterladen</button>
+          <button class="btn" id="btn-json-upload-abschluss">Angebot laden</button>
+          <button class="btn" id="btn-print">Drucken</button>
+          <button class="btn" id="btn-neu-starten">Neu starten</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <nav class="slide-nav no-print">
+    <button class="btn" id="btn-zurueck">← Zurück</button>
+    <div class="slide-nav__dots" id="slide-dots"></div>
+    <button class="btn btn--primary" id="btn-weiter">Weiter →</button>
+  </nav>
+
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
