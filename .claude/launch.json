@@ -4,8 +4,8 @@
     {
       "name": "static",
       "runtimeExecutable": "C:/Program Files/Inkscape/bin/python.exe",
-      "runtimeArgs": ["-m", "http.server", "8985"],
-      "port": 8985
+      "runtimeArgs": ["-m", "http.server", "8997"],
+      "port": 8997
     }
   ]
 }

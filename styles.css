@@ -388,6 +388,18 @@ button {
   margin: var(--space-5) 0;
 }
 
+.badge-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+.badge-card img {
+  max-height: 130px;
+  width: auto;
+  object-fit: contain;
+}
+
 .card {
   background: var(--surface);
   border: 1px solid var(--line);
