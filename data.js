@@ -100,6 +100,18 @@ const PRICES = {
   zahlungsplan: { anzahlung: 0.6, termin: 0.2, abnahme: 0.2 },
 };
 
+// BAFA/BEG-Förderung (unverbindliche Berechnung, § 19 AGB Fördervorbehalt).
+// Fördersatz auf die Nettosumme, gedeckelt auf die förderfähigen Höchstbeträge je Wohneinheit (WE):
+// volle Deckelung für die selbstbewohnte WE, halbe Deckelung je fremdvermieteter WE.
+const FOERDERUNG = {
+  satzBasis: 0.15,
+  satzISFP: 0.2,
+  capSelbstbewohnt15: 30000,
+  capSelbstbewohnt20: 60000,
+  capFremdvermietet15: 15000,
+  capFremdvermietet20: 30000,
+};
+
 // Reihenfolge + Metadaten der fünf Systeme für Slide 5 (Toggles) und Teil B.
 const SYSTEME_META = [
   {
@@ -167,6 +179,14 @@ const NAV_STEPS = {
   uwert: {
     label: 'U-Wert-Vergleich',
     icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="20" x2="4" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="20" y1="20" x2="20" y2="14"/></svg>',
+  },
+  vorteile: {
+    label: 'Weitere Vorteile',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>',
+  },
+  qualitaet: {
+    label: 'Qualität & Förderung',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M9 12.5 7 21l5-3 5 3-2-8.5"/></svg>',
   },
   systeme: {
     label: 'Systemauswahl',
@@ -247,13 +267,45 @@ const TEXTS = {
   ],
   loesungIntro:
     'Die Nanobeschichtung PSCoat wird in nur drei dünnen Schichten aufgetragen und ersetzt klassische Dämmstärken durch physikalische Wirksamkeit im Millimeterbereich.',
-  schichtaufbau: [
-    { name: 'Grundierung', produkt: 'PSC 250 T Basic (A/B)' },
-    { name: 'Funktionsschicht', produkt: 'PSC 250 T BUILD / BUILD Interior / HP' },
-    { name: 'Abschlussschicht', produkt: 'PSC 250 T ECO / ECI / ECR / ECF / EC' },
-  ],
   uwertHinweis:
     'Herstellerangabe, Beschichtung allein bei 1 mm, ohne Bestandsbauteil. GEG-Niveaus = Grenzwerte, keine realen Bauteile.',
+  vorteile: [
+    {
+      titel: 'CO₂ & Entsorgung',
+      text: 'Nur ca. 8–12 % des CO₂-Fußabdrucks eines klassischen WDVS. Reste sind unbedenklich und können über den Hausmüll entsorgt werden.',
+    },
+    {
+      titel: 'Chemisch- & UV-beständig',
+      text: 'Widersteht Witterung, UV-Strahlung und chemischen Einflüssen dauerhaft, ohne an Farbe oder Funktion zu verlieren.',
+    },
+    {
+      titel: 'Weniger Schimmelrisiko',
+      text: 'Bessere Feuchtigkeitsregulierung als klassische Dämmmethoden – im Prüfgutachten nachgewiesen.',
+    },
+    {
+      titel: 'Im Vergleich zu anderen Dämmverfahren',
+      text: 'Meist ohne Gerüst und Baugenehmigung, kein Schießscharten-Effekt an Fenstern und Türen, Balkone bleiben in voller Größe erhalten.',
+    },
+  ],
+  qualitaet: [
+    {
+      titel: 'Farbliche Gestaltung',
+      text: 'Erhältlich in allen hellen Farbtönen – ein nachträgliches Streichen der Fassade entfällt.',
+    },
+    {
+      titel: 'Förderung',
+      text: 'Über unser Energieberater-Netzwerk ist eine Förderung von 15–20 % möglich (BAFA/BEG, individueller Sanierungsfahrplan).',
+      accent: 'green',
+    },
+    {
+      titel: 'CE-Kennzeichnung',
+      text: 'EU-weite bauaufsichtliche Zulassung auf Basis der Europäischen Technischen Bewertung (ETA) – geht über die deutsche bauaufsichtliche Zulassung hinaus.',
+    },
+    {
+      titel: 'Mögliche Untergründe',
+      text: 'Holz, Klinker, Stein, Putz, Metall, viele Kunststoffe und Bitumen – nahezu jede Oberfläche lässt sich beschichten.',
+    },
+  ],
   // Prozessschritte für die Ablauf-Timeline (Slide 6). Jeder Kreis ist anklickbar und lässt
   // sich als erledigt (grün) markieren – der Status liegt in state.ui.ablaufErledigt, nicht hier.
   ablauf: [

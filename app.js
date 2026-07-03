@@ -183,6 +183,32 @@ function calcAngebot(state) {
   return { positionen, summen };
 }
 
+/**
+ * Unverbindliche BAFA/BEG-Förderberechnung (§ 19 AGB Fördervorbehalt).
+ * Fördersatz auf die Nettosumme, gedeckelt je Wohneinheit: volle Deckelung für die
+ * selbstbewohnte WE, halbe Deckelung je fremdvermieteter WE (siehe FOERDERUNG in data.js).
+ */
+function calcFoerderung(foerderungState, summen) {
+  const we = Math.max(1, Number(foerderungState.wohneinheiten) || 1);
+  const selbstbewohnt = !!foerderungState.selbstbewohnt;
+  const fremdvermieteteWE = selbstbewohnt ? we - 1 : we;
+
+  const cap15 = (selbstbewohnt ? FOERDERUNG.capSelbstbewohnt15 : 0) + fremdvermieteteWE * FOERDERUNG.capFremdvermietet15;
+  const cap20 = (selbstbewohnt ? FOERDERUNG.capSelbstbewohnt20 : 0) + fremdvermieteteWE * FOERDERUNG.capFremdvermietet20;
+
+  const betrag15 = round2(Math.min(summen.zwischensummeNetto * FOERDERUNG.satzBasis, cap15));
+  const betrag20 = round2(Math.min(summen.zwischensummeNetto * FOERDERUNG.satzISFP, cap20));
+
+  return {
+    betrag15,
+    preisNach15: round2(summen.brutto - betrag15),
+    betrag20,
+    preisNach20: round2(summen.brutto - betrag20),
+    cap15,
+    cap20,
+  };
+}
+
 /* ============================================================
    State
    ============================================================ */
@@ -264,6 +290,7 @@ function defaultState() {
       boden: defaultSystemState('boden'),
       industrie: defaultSystemState('industrie'),
     },
+    foerderung: { wohneinheiten: 1, selbstbewohnt: true },
     ui: { currentSlide: 'titel', ablaufErledigt: [] },
   };
 }
@@ -304,7 +331,7 @@ function isStateEmpty(s) {
    Slide-Engine
    ============================================================ */
 
-const SLIDE_ORDER_A = ['titel', 'problem', 'loesung', 'uwert', 'systeme', 'ablauf'];
+const SLIDE_ORDER_A = ['titel', 'problem', 'loesung', 'uwert', 'vorteile', 'qualitaet', 'systeme', 'ablauf'];
 const SLIDE_ORDER_B = ['b-fassade', 'b-innen', 'b-dach', 'b-boden', 'b-industrie'];
 const SLIDE_ORDER_C = ['angebot', 'abschluss'];
 const SLIDE_TO_SYSTEM = { 'b-fassade': 'fassade', 'b-innen': 'innen', 'b-dach': 'dach', 'b-boden': 'boden', 'b-industrie': 'industrie' };
@@ -395,18 +422,17 @@ function renderStaticContent() {
     )
     .join('');
 
-  // Schichtaufbau (Slide 3)
-  document.getElementById('schichtaufbau-steps').innerHTML = TEXTS.schichtaufbau
-    .map(
-      (s, i) => `<div class="step">
-        <div class="n">${i + 1}</div>
-        <div class="step__title">${s.name}</div>
-        <div class="muted">${s.produkt}</div>
-      </div>`
-    )
+  // Weitere Vorteile (Slide 4a)
+  document.getElementById('vorteile-cards').innerHTML = TEXTS.vorteile
+    .map((v) => `<div class="card"><h3>${v.titel}</h3><p class="muted">${v.text}</p></div>`)
     .join('');
 
-  // Kenndaten-Grid (Slide 3)
+  // Qualität & Förderung (Slide 4b)
+  document.getElementById('qualitaet-cards').innerHTML = TEXTS.qualitaet
+    .map((q) => `<div class="card${q.accent === 'green' ? ' card--green' : ''}"><h3>${q.titel}</h3><p class="muted">${q.text}</p></div>`)
+    .join('');
+
+// Kenndaten-Grid (Slide 3)
   const kd = KENNDATEN;
   document.getElementById('kenndaten-grid').innerHTML = `
     <div class="kv"><strong>${kd.lambda}</strong>Lambda-Wert λ</div>
@@ -879,6 +905,22 @@ function renderAngebot() {
     <div class="card"><h3>20 %</h3><p class="muted">nach Abnahme</p><div class="amount">${formatCurrency(summen.zahlungsplan.abnahme20)}</div></div>
   `;
 
+  document.getElementById('foerderung-we').value = state.foerderung.wohneinheiten;
+  document.getElementById('foerderung-selbstbewohnt').checked = state.foerderung.selbstbewohnt;
+  const f = calcFoerderung(state.foerderung, summen);
+  document.getElementById('foerderung-grid').innerHTML = `
+    <div class="foerderung-card">
+      <h4>Mögliche BAFA-Förderung (15 %)</h4>
+      <div class="foerderung-card__betrag">${formatCurrency(f.betrag15)}</div>
+      <p class="muted">Preis nach Förderung: <strong>${formatCurrency(f.preisNach15)}</strong></p>
+    </div>
+    <div class="foerderung-card">
+      <h4>Mögliche Förderung mit iSFP (20 %)</h4>
+      <div class="foerderung-card__betrag">${formatCurrency(f.betrag20)}</div>
+      <p class="muted">Preis nach Förderung: <strong>${formatCurrency(f.preisNach20)}</strong></p>
+    </div>
+  `;
+
   const banner = document.getElementById('import-banner');
   if (state.ui.importHinweis) {
     banner.hidden = false;
@@ -921,6 +963,7 @@ function buildExportJSON() {
     systeme: state.systeme,
     positionen,
     summen,
+    foerderung: Object.assign({}, state.foerderung, calcFoerderung(state.foerderung, summen)),
   };
 }
 
@@ -954,6 +997,10 @@ function mergeWithDefaults(imported) {
   SYSTEM_ORDER.forEach((key) => {
     merged.systeme[key] = Object.assign({}, defaultSystemState(key), (imported.systeme || {})[key] || {});
   });
+  merged.foerderung = {
+    wohneinheiten: Math.max(1, Number((imported.foerderung || {}).wohneinheiten) || fresh.foerderung.wohneinheiten),
+    selbstbewohnt: (imported.foerderung || {}).selbstbewohnt !== undefined ? !!imported.foerderung.selbstbewohnt : fresh.foerderung.selbstbewohnt,
+  };
   return merged;
 }
 
@@ -1004,6 +1051,17 @@ function wireGlobalControls() {
   document.getElementById('arrow-prev').addEventListener('click', () => navigate(-1));
   document.getElementById('arrow-next').addEventListener('click', () => navigate(1));
   document.getElementById('btn-cta-kalkulieren').addEventListener('click', () => navigate(1));
+
+  document.getElementById('foerderung-we').addEventListener('input', (e) => {
+    state.foerderung.wohneinheiten = Math.max(1, Number(e.target.value) || 1);
+    renderAngebot();
+    saveState();
+  });
+  document.getElementById('foerderung-selbstbewohnt').addEventListener('change', (e) => {
+    state.foerderung.selbstbewohnt = e.target.checked;
+    renderAngebot();
+    saveState();
+  });
 
   document.getElementById('save-icon').addEventListener('click', downloadJSON);
   document.getElementById('btn-json-download').addEventListener('click', downloadJSON);
@@ -1086,7 +1144,7 @@ function boot() {
 document.addEventListener('DOMContentLoaded', boot);
 
 // Für Tests (Kontrollrechnung etc.) im Browser-Kontext exponiert.
-window.NanoCalc = { round2, ceilTo20, buildPositionenFromState, calcSummen, calcAngebot, formatCurrency };
+window.NanoCalc = { round2, ceilTo20, buildPositionenFromState, calcSummen, calcAngebot, calcFoerderung, formatCurrency };
 window.NanoState = {
   get: () => state,
   set: (s) => {

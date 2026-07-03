@@ -109,6 +109,35 @@ function runTests() {
     assertEqual('Pauschale bezieht sich NUR auf Fassadenfläche (20 m²), nicht Gesamtfläche', farbenMulti && farbenMulti.menge, 20);
   })();
 
+  // ---------- Förderung (BAFA/BEG): Deckelung je Wohneinheit ----------
+  (function () {
+    const summenKlein = { zwischensummeNetto: 10000, brutto: 11900 };
+    const summenGross = { zwischensummeNetto: 500000, brutto: 595000 };
+
+    // Standard: 1 WE, selbstbewohnt -> volle Deckelung 30.000 / 60.000
+    const f1 = window.NanoCalc.calcFoerderung({ wohneinheiten: 1, selbstbewohnt: true }, summenKlein);
+    assertEqual('Förderung 1 WE selbstbewohnt: Cap 15% = 30.000 €', f1.cap15, 30000);
+    assertEqual('Förderung 1 WE selbstbewohnt: Cap 20% = 60.000 €', f1.cap20, 60000);
+    assertEqual('Förderung unter Deckel: Betrag = Netto * 15%', f1.betrag15, 1500);
+    assertEqual('Förderung unter Deckel: Betrag = Netto * 20%', f1.betrag20, 2000);
+    assertEqual('Preis nach Förderung 15% = Brutto - Betrag', f1.preisNach15, 11900 - 1500);
+
+    // Deckel greift bei hoher Summe
+    const f2 = window.NanoCalc.calcFoerderung({ wohneinheiten: 1, selbstbewohnt: true }, summenGross);
+    assertEqual('Förderung über Deckel: Betrag 15% gedeckelt auf 30.000 €', f2.betrag15, 30000);
+    assertEqual('Förderung über Deckel: Betrag 20% gedeckelt auf 60.000 €', f2.betrag20, 60000);
+
+    // Mehrere WE, eine selbstbewohnt: volle Deckelung + halbe je fremdvermieteter WE
+    const f3 = window.NanoCalc.calcFoerderung({ wohneinheiten: 3, selbstbewohnt: true }, summenGross);
+    assertEqual('3 WE, 1 selbstbewohnt: Cap 15% = 30.000 + 2×15.000 = 60.000 €', f3.cap15, 60000);
+    assertEqual('3 WE, 1 selbstbewohnt: Cap 20% = 60.000 + 2×30.000 = 120.000 €', f3.cap20, 120000);
+
+    // Mehrere WE, keine selbstbewohnt (reine Vermietung): nur halbe Deckelung je WE
+    const f4 = window.NanoCalc.calcFoerderung({ wohneinheiten: 2, selbstbewohnt: false }, summenGross);
+    assertEqual('2 WE, keine selbstbewohnt: Cap 15% = 2×15.000 = 30.000 €', f4.cap15, 30000);
+    assertEqual('2 WE, keine selbstbewohnt: Cap 20% = 2×30.000 = 60.000 €', f4.cap20, 60000);
+  })();
+
   // ---------- 5. Export → Neu starten → Import → Export: inhaltsgleich ----------
   return (async function () {
     window.NanoState.set(window.NanoState.defaultState());
@@ -119,6 +148,7 @@ function runTests() {
     s.systeme.fassade.m2Eingabe = 87;
     s.systeme.innen.gewaehlt = true;
     s.systeme.innen.m2Eingabe = 45;
+    s.foerderung = { wohneinheiten: 3, selbstbewohnt: false };
 
     const json1 = buildExportJSON();
 

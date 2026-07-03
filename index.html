@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Nano-Vertriebstool – Nanofassadendämmung / PSCoat</title>
-<link rel="stylesheet" href="styles.css?v=19" />
+<link rel="stylesheet" href="styles.css?v=25" />
 </head>
 <body>
 <div id="app">
@@ -101,12 +101,13 @@
         <h2>Physik, die überzeugt</h2>
         <p>Die Nanobeschichtung PSCoat wird in nur drei dünnen Schichten aufgetragen und ersetzt klassische Dämmstärken durch physikalische Wirksamkeit im Millimeterbereich.</p>
 
-        <img src="assets/wandquerschnitt.jpg" alt="Schichtaufbau der Nanobeschichtung auf einer Ziegelwand: Grundierung, Funktionsschicht, Abschlussschicht" class="wandquerschnitt-img" />
-
-        <div class="steps" id="schichtaufbau-steps"></div>
-
-        <div class="kenndaten-grid" id="kenndaten-grid"></div>
-        <p class="muted" style="font-size:12.5px;">Angaben lt. Hersteller (Techn. Datenblatt).</p>
+        <div class="loesung-row">
+          <img src="assets/wandquerschnitt.jpg" alt="Schichtaufbau der Nanobeschichtung auf einer Ziegelwand: Grundierung, Funktionsschicht, Abschlussschicht" class="wandquerschnitt-img" />
+          <div class="loesung-row__kenndaten">
+            <div class="kenndaten-grid" id="kenndaten-grid"></div>
+            <p class="muted" style="font-size:12.5px;">Angaben lt. Hersteller (Techn. Datenblatt).</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -121,6 +122,25 @@
           <div class="card badge-card"><img src="assets/icons/badge-garantie.png" alt="25 Jahre Herstellergarantie auf die Dämmfunktion" /></div>
           <div class="card badge-card"><img src="assets/icons/badge-gewaehrleistung.png" alt="5 Jahre gesetzliche Gewährleistung" /></div>
         </div>
+      </div>
+    </section>
+
+    <!-- 4a. Weitere Vorteile -->
+    <section class="slide" id="slide-vorteile" data-slide-id="vorteile">
+      <div class="slide-inner">
+        <p class="eyebrow">Nachhaltig & beständig</p>
+        <h2>Weitere Vorteile</h2>
+        <div class="card-grid" id="vorteile-cards"></div>
+      </div>
+    </section>
+
+    <!-- 4b. Qualität & Förderung -->
+    <section class="slide" id="slide-qualitaet" data-slide-id="qualitaet">
+      <div class="slide-inner">
+        <p class="eyebrow">Qualität, Sicherheit & Förderung</p>
+        <h2>Alle Details auf einen Blick</h2>
+        <div class="card-grid" id="qualitaet-cards"></div>
+        <p class="muted" style="font-size:12px;">Unverbindliche Angabe zur Förderung – keine Förderberatung. Details zur Berechnung auf der Angebotsseite.</p>
       </div>
     </section>
 
@@ -523,6 +543,20 @@
 
         <h3 style="margin-top:var(--space-6);">Zahlungsplan</h3>
         <div class="payment-plan" id="angebot-zahlungsplan"></div>
+
+        <h3 style="margin-top:var(--space-6);">Mögliche Förderung (BAFA/BEG)</h3>
+        <div class="field-row" style="max-width:460px;">
+          <div class="field">
+            <label for="foerderung-we">Anzahl Wohneinheiten</label>
+            <input type="number" id="foerderung-we" min="1" step="1" value="1" />
+          </div>
+          <div class="checkbox-field" style="align-self:flex-end;margin-bottom:16px;">
+            <input type="checkbox" id="foerderung-selbstbewohnt" checked />
+            <label for="foerderung-selbstbewohnt">eine WE selbstbewohnt (sonst alle vermietet)</label>
+          </div>
+        </div>
+        <div class="foerderung-grid" id="foerderung-grid"></div>
+        <p class="muted" style="font-size:12px;">Unverbindliche Berechnung auf Basis der Nettosumme. Förderfähigkeit und -höhe stehen unter Vorbehalt der BAFA-Bewilligung (§ 19 AGB).</p>
       </div>
     </section>
 
@@ -552,7 +586,7 @@
 
 </div>
 
-<script src="data.js?v=19"></script>
-<script src="app.js?v=19"></script>
+<script src="data.js?v=25"></script>
+<script src="app.js?v=25"></script>
 </body>
 </html>

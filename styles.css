@@ -408,6 +408,14 @@ button {
   box-shadow: var(--shadow-card);
 }
 
+.card--green {
+  background: color-mix(in srgb, var(--nano-green) 8%, #fff);
+  border-color: var(--nano-green);
+}
+.card--green h3 {
+  color: var(--success);
+}
+
 .card h3 {
   margin-bottom: var(--space-2);
 }
@@ -670,6 +678,33 @@ table.offer-table .pos-note {
   color: var(--nano-blue);
 }
 
+.foerderung-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-4);
+  margin: var(--space-4) 0;
+}
+.foerderung-card {
+  background: color-mix(in srgb, var(--nano-green) 8%, #fff);
+  border: 1px solid var(--nano-green);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+}
+.foerderung-card h4 {
+  margin: 0 0 var(--space-2);
+  font-size: 14px;
+  color: var(--success);
+}
+.foerderung-card__betrag {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--success);
+}
+.foerderung-card p {
+  margin: var(--space-2) 0 0;
+  font-size: 13px;
+}
+
 .disclaimer {
   font-size: 13px;
   background: var(--stone-100);
@@ -747,11 +782,23 @@ table.offer-table .pos-note {
   margin-top: var(--space-4);
 }
 
+.loesung-row {
+  display: flex;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-top: var(--space-5);
+}
+.loesung-row__kenndaten {
+  flex: 1 1 220px;
+}
+
 .wandquerschnitt-img {
+  flex: 2 1 300px;
+  min-width: 0;
   width: 100%;
-  max-width: 640px;
+  max-width: 560px;
   border-radius: var(--radius);
-  margin: var(--space-5) 0;
 }
 
 /* ---------- Kennzahlen-Grid ---------- */
@@ -771,44 +818,6 @@ table.offer-table .pos-note {
   display: block;
   color: var(--nano-blue);
   font-size: 15px;
-}
-
-/* ---------- Schichtaufbau-Steps (Slide 3) ---------- */
-.steps {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-  margin: var(--space-4) 0;
-}
-.steps .step {
-  flex: 1 1 140px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: var(--space-4) var(--space-3) var(--space-3);
-  font-size: 13px;
-  text-align: center;
-}
-.steps .step .n {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  flex: 0 0 auto;
-  border-radius: 50%;
-  background: var(--nano-blue);
-  color: #fff;
-  font-weight: 700;
-  margin-bottom: var(--space-3);
-}
-.steps .step .step__title {
-  font-weight: 700;
-  color: var(--carbon);
-  margin-bottom: 2px;
 }
 
 /* ---------- Ablauf-Timeline (Slide 6, Prozessschritte) ---------- */
