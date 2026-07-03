@@ -386,7 +386,24 @@ function renderStaticContent() {
   // Problem-Cards
   const problemEl = document.getElementById('problem-cards');
   problemEl.innerHTML = TEXTS.problem
-    .map((p) => `<div class="card"><h3>${p.titel}</h3><p class="muted">${p.text}</p></div>`)
+    .map(
+      (p) => `<div class="card">
+        <img src="${p.icon}" alt="" class="problem-card__icon" />
+        <h3>${p.titel}</h3>
+        <p class="muted">${p.text}</p>
+      </div>`
+    )
+    .join('');
+
+  // Schichtaufbau (Slide 3)
+  document.getElementById('schichtaufbau-steps').innerHTML = TEXTS.schichtaufbau
+    .map(
+      (s, i) => `<div class="step">
+        <div class="n">${i + 1}</div>
+        <div class="step__title">${s.name}</div>
+        <div class="muted">${s.produkt}</div>
+      </div>`
+    )
     .join('');
 
   // Kenndaten-Grid (Slide 3)

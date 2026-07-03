@@ -227,26 +227,30 @@ const TEXTS = {
     {
       titel: 'Steigende Energiekosten',
       text: 'Schlecht gedämmte Gebäude verlieren spürbar Heizenergie – die Kosten steigen Jahr für Jahr.',
+      icon: 'assets/icons/problem-energiekosten.png',
     },
     {
       titel: 'Sanierungsdruck durch das GEG',
       text: 'Das Gebäudeenergiegesetz erhöht die Anforderungen an den energetischen Zustand von Bestandsgebäuden.',
+      icon: 'assets/icons/problem-geg.png',
     },
     {
       titel: 'Klassische Dämmung: dick & teuer',
       text: 'Konventionelle Systeme brauchen viele Zentimeter Aufbau, hohe Materialkosten und aufwendige Befestigung.',
+      icon: 'assets/icons/problem-daemmstaerke.png',
     },
     {
       titel: 'Wochenlange Baustelle',
       text: 'Gerüst, Trockenzeiten, Wohnraumverlust – klassische Sanierung bindet Zeit und Nerven.',
+      icon: 'assets/icons/problem-baustelle.png',
     },
   ],
   loesungIntro:
     'Die Nanobeschichtung PSCoat wird in nur drei dünnen Schichten aufgetragen und ersetzt klassische Dämmstärken durch physikalische Wirksamkeit im Millimeterbereich.',
   schichtaufbau: [
     { name: 'Grundierung', produkt: 'PSC 250 T Basic (A/B)' },
-    { name: 'Funktionsschicht', produkt: 'PSC 250 T BUILD / HP' },
-    { name: 'Abschlussschicht', produkt: 'PSC 250 T ECO / ECI / ECR / ECF' },
+    { name: 'Funktionsschicht', produkt: 'PSC 250 T BUILD / BUILD Interior / HP' },
+    { name: 'Abschlussschicht', produkt: 'PSC 250 T ECO / ECI / ECR / ECF / EC' },
   ],
   uwertHinweis:
     'Herstellerangabe, Beschichtung allein bei 1 mm, ohne Bestandsbauteil. GEG-Niveaus = Grenzwerte, keine realen Bauteile.',

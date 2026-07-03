@@ -412,6 +412,12 @@ button {
   margin-bottom: var(--space-2);
 }
 
+.problem-card__icon {
+  width: 76px;
+  height: auto;
+  margin-bottom: var(--space-3);
+}
+
 .plain-list {
   margin: 0;
   padding-left: 18px;
@@ -733,13 +739,19 @@ table.offer-table .pos-note {
 
 .uwert-footnote {
   font-size: 13px;
-  font-weight: 700;
-  color: var(--danger);
-  background: #fdecea;
-  border: 1px solid var(--danger);
+  color: var(--muted);
+  background: var(--stone-100);
+  border-left: 4px solid var(--nano-blue);
   border-radius: var(--radius);
   padding: var(--space-3) var(--space-4);
   margin-top: var(--space-4);
+}
+
+.wandquerschnitt-img {
+  width: 100%;
+  max-width: 640px;
+  border-radius: var(--radius);
+  margin: var(--space-5) 0;
 }
 
 /* ---------- Kennzahlen-Grid ---------- */
@@ -761,7 +773,7 @@ table.offer-table .pos-note {
   font-size: 15px;
 }
 
-/* ---------- Ablauf-Steps ---------- */
+/* ---------- Schichtaufbau-Steps (Slide 3) ---------- */
 .steps {
   display: flex;
   flex-wrap: wrap;
@@ -770,24 +782,33 @@ table.offer-table .pos-note {
 }
 .steps .step {
   flex: 1 1 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: var(--space-3);
+  padding: var(--space-4) var(--space-3) var(--space-3);
   font-size: 13px;
   text-align: center;
 }
 .steps .step .n {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
   border-radius: 50%;
   background: var(--nano-blue);
   color: #fff;
   font-weight: 700;
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+.steps .step .step__title {
+  font-weight: 700;
+  color: var(--carbon);
+  margin-bottom: 2px;
 }
 
 /* ---------- Ablauf-Timeline (Slide 6, Prozessschritte) ---------- */

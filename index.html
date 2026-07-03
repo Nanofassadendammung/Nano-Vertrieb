@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Nano-Vertriebstool – Nanofassadendämmung / PSCoat</title>
-<link rel="stylesheet" href="styles.css?v=15" />
+<link rel="stylesheet" href="styles.css?v=19" />
 </head>
 <body>
 <div id="app">
@@ -101,30 +101,12 @@
         <h2>Physik, die überzeugt</h2>
         <p>Die Nanobeschichtung PSCoat wird in nur drei dünnen Schichten aufgetragen und ersetzt klassische Dämmstärken durch physikalische Wirksamkeit im Millimeterbereich.</p>
 
-        <div style="display:flex; gap:var(--space-6); flex-wrap:wrap; align-items:flex-start; margin-top:var(--space-5);">
-          <div style="flex:1 1 260px;">
-            <svg viewBox="0 0 220 260" width="220" height="260" role="img" aria-label="Wand-Querschnitt: Grundierung, Funktionsschicht, Abschlussschicht">
-              <rect x="10" y="10" width="80" height="240" fill="#cfd8e3" stroke="#9aa7b5"/>
-              <text x="50" y="135" text-anchor="middle" font-size="11" fill="#334155" transform="rotate(-90 50 135)">Bestandsbauteil</text>
-              <rect x="90" y="10" width="14" height="240" fill="#0b4f8a"/>
-              <rect x="104" y="10" width="14" height="240" fill="#16b8d4"/>
-              <rect x="118" y="10" width="14" height="240" fill="#10b981"/>
-              <text x="97" y="262" font-size="9" text-anchor="middle" fill="#334155">Grund.</text>
-              <text x="111" y="262" font-size="9" text-anchor="middle" fill="#334155">Funkt.</text>
-              <text x="125" y="262" font-size="9" text-anchor="middle" fill="#334155">Abschl.</text>
-            </svg>
-          </div>
-          <div style="flex:2 1 340px;">
-            <div class="steps">
-              <div class="step"><div class="n">1</div>Grundierung<br /><span class="muted">PSC 250 T Basic (A/B)</span></div>
-              <div class="step"><div class="n">2</div>Funktionsschicht<br /><span class="muted">PSC 250 T BUILD / HP</span></div>
-              <div class="step"><div class="n">3</div>Abschlussschicht<br /><span class="muted">ECO / ECI / ECR / ECF</span></div>
-            </div>
+        <img src="assets/wandquerschnitt.jpg" alt="Schichtaufbau der Nanobeschichtung auf einer Ziegelwand: Grundierung, Funktionsschicht, Abschlussschicht" class="wandquerschnitt-img" />
 
-            <div class="kenndaten-grid" id="kenndaten-grid"></div>
-            <p class="muted" style="font-size:12.5px;">Angaben lt. Hersteller (Techn. Datenblatt).</p>
-          </div>
-        </div>
+        <div class="steps" id="schichtaufbau-steps"></div>
+
+        <div class="kenndaten-grid" id="kenndaten-grid"></div>
+        <p class="muted" style="font-size:12.5px;">Angaben lt. Hersteller (Techn. Datenblatt).</p>
       </div>
     </section>
 
@@ -570,7 +552,7 @@
 
 </div>
 
-<script src="data.js?v=15"></script>
-<script src="app.js?v=15"></script>
+<script src="data.js?v=19"></script>
+<script src="app.js?v=19"></script>
 </body>
 </html>
