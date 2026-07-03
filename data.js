@@ -139,6 +139,53 @@ const SYSTEME_META = [
   },
 ];
 
+// Erklärende Icons je System (Slide 5, Cards + Timeline), referenziert über SYSTEME_META[].icon.
+// Fertige, von ChatGPT erstellte Illustrationen (PNG, transparenter Hintergrund) unter assets/icons/.
+const SYSTEM_ICONS = {
+  fassade: '<img src="assets/icons/system-fassade.png" alt="NanoFASSADENdämmung" />',
+  innen: '<img src="assets/icons/system-innen.png" alt="NanoINNENdämmung" />',
+  dach: '<img src="assets/icons/system-dach.png" alt="NanoDACHdämmung" />',
+  boden: '<img src="assets/icons/system-boden.png" alt="NanoBODENdämmung" />',
+  industrie: '<img src="assets/icons/system-industrie.png" alt="NanoINDUSTRIEdämmung" />',
+};
+
+// Icons + Beschriftungen für die Timeline-Navigation (nicht-System-Slides).
+// System-Slides (b-*) nutzen dieselben SYSTEM_ICONS wie Slide 5.
+const NAV_STEPS = {
+  titel: {
+    label: 'Start',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg>',
+  },
+  problem: {
+    label: 'Problem',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 22 20H2z"/><line x1="12" y1="9" x2="12" y2="14"/><line x1="12" y1="17.2" x2="12" y2="17.3"/></svg>',
+  },
+  loesung: {
+    label: 'Lösung',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 12l10 5 10-5"/><path d="M2 17l10 5 10-5"/></svg>',
+  },
+  uwert: {
+    label: 'U-Wert-Vergleich',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="20" x2="4" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="20" y1="20" x2="20" y2="14"/></svg>',
+  },
+  systeme: {
+    label: 'Systemauswahl',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg>',
+  },
+  ablauf: {
+    label: 'Ablauf & Förderung',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 6h7a3 3 0 0 1 3 3v0a3 3 0 0 1-3 3H7a3 3 0 0 0-3 3v0a3 3 0 0 0 3 3h10"/></svg>',
+  },
+  angebot: {
+    label: 'Angebotsübersicht',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><line x1="9" y1="13" x2="17" y2="13"/><line x1="9" y1="17" x2="17" y2="17"/></svg>',
+  },
+  abschluss: {
+    label: 'Abschluss',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h13l-3 4 3 4H5"/></svg>',
+  },
+};
+
 // Untergrund-Optionen je System (Abschnitt 3, Teil B).
 const UNTERGRUND_OPTIONEN = {
   fassade: ['Putz mineralisch', 'Putz kunstharz', 'Beton', 'Klinker', 'Altanstrich', 'Sonstiges'],
@@ -174,7 +221,8 @@ const UWERT_VERGLEICH = [
 ];
 
 const TEXTS = {
-  claim: 'Dämmen in Millimetern – Nanobeschichtung für Fassade, Innenraum, Dach, Boden und Industrie.',
+  claimHeadline: 'Dämmen mit 1 mm – Nanofassadendämmung',
+  claimSubtitle: 'Nanobeschichtung für Fassade, Innenraum, Dach, Boden und Industrie.',
   problem: [
     {
       titel: 'Steigende Energiekosten',
@@ -202,13 +250,23 @@ const TEXTS = {
   ],
   uwertHinweis:
     'Herstellerangabe, Beschichtung allein bei 1 mm, ohne Bestandsbauteil. GEG-Niveaus = Grenzwerte, keine realen Bauteile.',
+  // Prozessschritte für die Ablauf-Timeline (Slide 6). Jeder Kreis ist anklickbar und lässt
+  // sich als erledigt (grün) markieren – der Status liegt in state.ui.ablaufErledigt, nicht hier.
   ablauf: [
-    'Aufmaß',
-    'Angebot',
-    'Auftrag',
-    'Materiallieferung (4 Wochen nach Anzahlung)',
-    'Ausführung',
-    'Abnahme mit Fotodokumentation',
+    { nr: '1', text: 'Beratungsgespräch' },
+    { nr: '2', text: 'Kostenvoranschlag' },
+    { nr: '3', text: 'Weiteres Beratungsgespräch, falls gewünscht', optional: true },
+    { nr: '4', text: 'Auftragserteilung' },
+    { nr: '4a', text: 'Ggf. Förderantrag / Eingangsbestätigung / Förderzusage', optional: true },
+    { nr: '5', text: 'Je nach Gebäude, ggf. Aufmaß und Besichtigung', optional: true },
+    { nr: '6', text: 'Auftragsbestätigung' },
+    { nr: '7', text: 'Anzahlungsrechnung / Zahlung der Anzahlung 60 %' },
+    { nr: '8', text: 'Lieferung des Materials an die Baustelle' },
+    { nr: '9', text: 'Terminabsprache für die Ausführung' },
+    { nr: '10', text: 'Teilzahlungsrechnung / Zahlung 7 Tage vor der Ausführung 20 %' },
+    { nr: '11', text: 'Ausführung' },
+    { nr: '12', text: 'Abnahme' },
+    { nr: '13', text: 'Abschlussrechnung' },
   ],
   foerderHinweis:
     'Die Beauftragung kann unter Fördervorbehalt (BEG, BAFA/KfW) erfolgen – siehe § 19 der AGB.',

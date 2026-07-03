@@ -152,6 +152,37 @@ function runTests() {
       assertTrue('System auswählen → b-fassade wird sichtbar', getVisibleSlides().includes('b-fassade'));
       document.querySelector('[data-toggle-system="fassade"]').click();
       assertTrue('System abwählen → b-fassade wird ausgeblendet', !getVisibleSlides().includes('b-fassade'));
+
+      // Timeline: Klick auf einen Knoten springt direkt zur zugehörigen Slide
+      goToSlide('titel');
+      const nodes = Array.from(document.querySelectorAll('.timeline-node'));
+      const angebotNode = nodes.find((n) => n.title === 'Angebotsübersicht');
+      angebotNode.click();
+      assertEqual('Timeline-Knoten-Klick springt zur Slide', document.querySelector('.slide.is-active').dataset.slideId, 'angebot');
+
+      // Timeline aktualisiert sich sofort beim Toggle, ohne Slide-Wechsel
+      goToSlide('systeme');
+      const labelsBefore = Array.from(document.querySelectorAll('.timeline-node')).map((n) => n.title);
+      document.querySelector('[data-toggle-system="boden"]').click();
+      const labelsAfterAdd = Array.from(document.querySelectorAll('.timeline-node')).map((n) => n.title);
+      assertTrue('Timeline aktualisiert live beim Auswählen (ohne Slide-Wechsel)', !labelsBefore.includes('NanoBODENdämmung') && labelsAfterAdd.includes('NanoBODENdämmung'));
+      document.querySelector('[data-toggle-system="boden"]').click();
+      const labelsAfterRemove = Array.from(document.querySelectorAll('.timeline-node')).map((n) => n.title);
+      assertTrue('Timeline aktualisiert live beim Abwählen (ohne Slide-Wechsel)', !labelsAfterRemove.includes('NanoBODENdämmung'));
+    })();
+
+    // ---------- Ablauf-Kreise: anklickbar, grün togglebar ----------
+    (function () {
+      window.NanoState.set(window.NanoState.defaultState());
+      goToSlide('ablauf');
+      const marker1 = document.querySelector('.ablauf-step[data-ablauf-nr="1"] .ablauf-step__marker');
+      assertTrue('Ablauf-Kreis startet nicht grün (kein automatisches "Heute" mehr)', !marker1.closest('.ablauf-step').classList.contains('is-done'));
+      marker1.click();
+      assertTrue('Ablauf-Kreis wird nach Klick grün (is-done)', document.querySelector('.ablauf-step[data-ablauf-nr="1"]').classList.contains('is-done'));
+      assertTrue('ablaufErledigt im State enthält "1"', window.NanoState.get().ui.ablaufErledigt.includes('1'));
+      document.querySelector('.ablauf-step[data-ablauf-nr="1"] .ablauf-step__marker').click();
+      assertTrue('Erneuter Klick macht Grün-Markierung rückgängig', !document.querySelector('.ablauf-step[data-ablauf-nr="1"]').classList.contains('is-done'));
+      assertTrue('ablaufErledigt im State enthält "1" nicht mehr', !window.NanoState.get().ui.ablaufErledigt.includes('1'));
     })();
 
     // ---------- 7. Reload (sessionStorage) ----------

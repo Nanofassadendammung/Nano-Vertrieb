@@ -264,7 +264,7 @@ function defaultState() {
       boden: defaultSystemState('boden'),
       industrie: defaultSystemState('industrie'),
     },
-    ui: { currentSlide: 'titel' },
+    ui: { currentSlide: 'titel', ablaufErledigt: [] },
   };
 }
 
@@ -334,24 +334,44 @@ function navigate(delta) {
   goToSlide(visible[nextIdx]);
 }
 
+function getStepMeta(slideId) {
+  if (SLIDE_TO_SYSTEM[slideId]) {
+    const sysKey = SLIDE_TO_SYSTEM[slideId];
+    const meta = SYSTEME_META.find((m) => m.key === sysKey);
+    return { label: meta.titel, icon: SYSTEM_ICONS[meta.icon] };
+  }
+  return NAV_STEPS[slideId] || { label: slideId, icon: '' };
+}
+
 function renderNav() {
   const visible = getVisibleSlides();
   const idx = visible.indexOf(state.ui.currentSlide);
 
-  const dotsEl = document.getElementById('slide-dots');
-  dotsEl.innerHTML = '';
+  const timelineEl = document.getElementById('slide-dots');
+  timelineEl.innerHTML = '';
   visible.forEach((id, i) => {
-    const dot = document.createElement('button');
-    dot.className = 'dot' + (i === idx ? ' is-active' : '');
-    dot.type = 'button';
-    dot.setAttribute('aria-label', `Slide ${i + 1}`);
-    dot.addEventListener('click', () => goToSlide(id));
-    dotsEl.appendChild(dot);
+    if (i > 0) {
+      const connector = document.createElement('span');
+      connector.className = 'timeline-connector' + (i <= idx ? ' is-done' : '');
+      timelineEl.appendChild(connector);
+    }
+    const { label, icon } = getStepMeta(id);
+    const node = document.createElement('button');
+    node.type = 'button';
+    node.className = 'timeline-node' + (i === idx ? ' is-active' : i < idx ? ' is-done' : '');
+    node.title = label;
+    node.setAttribute('aria-label', `${label} (Slide ${i + 1} von ${visible.length})`);
+    node.innerHTML = icon;
+    node.addEventListener('click', () => goToSlide(id));
+    timelineEl.appendChild(node);
   });
 
-  document.getElementById('btn-zurueck').disabled = idx <= 0;
-  const weiterBtn = document.getElementById('btn-weiter');
-  weiterBtn.disabled = idx >= visible.length - 1;
+  const isFirst = idx <= 0;
+  const isLast = idx >= visible.length - 1;
+  document.getElementById('btn-zurueck').disabled = isFirst;
+  document.getElementById('btn-weiter').disabled = isLast;
+  document.getElementById('arrow-prev').disabled = isFirst;
+  document.getElementById('arrow-next').disabled = isLast;
 }
 
 /* ============================================================
@@ -359,6 +379,10 @@ function renderNav() {
    ============================================================ */
 
 function renderStaticContent() {
+  // Claim (Slide 1)
+  document.getElementById('claim-headline').textContent = TEXTS.claimHeadline;
+  document.getElementById('claim-subtitle').textContent = TEXTS.claimSubtitle;
+
   // Problem-Cards
   const problemEl = document.getElementById('problem-cards');
   problemEl.innerHTML = TEXTS.problem
@@ -391,9 +415,7 @@ function renderStaticContent() {
   renderSystemCards();
 
   // Ablauf-Steps (Slide 6)
-  document.getElementById('ablauf-steps').innerHTML = TEXTS.ablauf
-    .map((s, i) => `<div class="step"><div class="n">${i + 1}</div>${s}</div>`)
-    .join('');
+  renderAblaufSteps();
 
   // Untergrund-Dropdowns je System
   SYSTEM_ORDER.forEach((key) => {
@@ -409,6 +431,7 @@ function renderSystemCards() {
     const selected = state.systeme[m.key].gewaehlt;
     return `<div class="card system-card${selected ? ' is-selected' : ''}" data-toggle-system="${m.key}">
       <div class="system-card__check">${selected ? '✓' : ''}</div>
+      <div class="system-card__icon">${SYSTEM_ICONS[m.icon] || ''}</div>
       <h3>${m.titel}</h3>
       <p class="muted">${m.kurz}</p>
       <p class="muted" style="font-size:12px;">${m.aufbau}</p>
@@ -420,6 +443,40 @@ function renderSystemCards() {
       const key = card.dataset.toggleSystem;
       state.systeme[key].gewaehlt = !state.systeme[key].gewaehlt;
       renderSystemCards();
+      renderNav();
+      saveState();
+    });
+  });
+}
+
+function renderAblaufSteps() {
+  const el = document.getElementById('ablauf-steps');
+  const rowsPerColumn = Math.ceil(TEXTS.ablauf.length / 2);
+  el.style.setProperty('--ablauf-rows', rowsPerColumn);
+
+  el.innerHTML = TEXTS.ablauf
+    .map((s, i) => {
+      const done = state.ui.ablaufErledigt.includes(s.nr);
+      const classes = ['ablauf-step'];
+      if (done) classes.push('is-done');
+      if (s.optional) classes.push('is-optional');
+      if (/[a-z]$/i.test(s.nr) && s.nr.length > 1) classes.push('is-substep');
+      if (i === rowsPerColumn - 1) classes.push('is-col-end');
+      const badge = s.optional ? '<span class="ablauf-step__badge">Optional</span>' : '';
+      return `<div class="${classes.join(' ')}" data-ablauf-nr="${s.nr}">
+        <span class="ablauf-step__marker-wrap"><button type="button" class="ablauf-step__marker" aria-pressed="${done}">${s.nr}</button></span>
+        <span class="ablauf-step__body"><span class="ablauf-step__text">${s.text}</span>${badge}</span>
+      </div>`;
+    })
+    .join('');
+
+  el.querySelectorAll('.ablauf-step__marker').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const nr = btn.closest('.ablauf-step').dataset.ablaufNr;
+      const idx = state.ui.ablaufErledigt.indexOf(nr);
+      if (idx >= 0) state.ui.ablaufErledigt.splice(idx, 1);
+      else state.ui.ablaufErledigt.push(nr);
+      renderAblaufSteps();
       saveState();
     });
   });
@@ -830,6 +887,7 @@ function renderAbschluss() {
 function renderSlideContent(slideId) {
   if (slideId === 'titel') syncFormFromState();
   if (slideId.startsWith('b-')) syncSystemFormFromState(SLIDE_TO_SYSTEM[slideId]);
+  if (slideId === 'ablauf') renderAblaufSteps();
   if (slideId === 'angebot') renderAngebot();
   if (slideId === 'abschluss') renderAbschluss();
 }
@@ -902,7 +960,7 @@ function importJSONFile(file) {
     }
     state = mergeWithDefaults(parsed);
     const erstelltAm = parsed.meta.erstelltAm ? new Date(parsed.meta.erstelltAm).toLocaleDateString('de-DE') : 'unbekannt';
-    state.ui = { currentSlide: 'angebot', importHinweis: `Angebot vom ${erstelltAm} geladen – Preise ggf. neu berechnet.` };
+    state.ui = { currentSlide: 'angebot', ablaufErledigt: [], importHinweis: `Angebot vom ${erstelltAm} geladen – Preise ggf. neu berechnet.` };
     saveState();
     syncFormFromState();
     goToSlide('angebot');
@@ -926,6 +984,8 @@ function neuStarten() {
 function wireGlobalControls() {
   document.getElementById('btn-zurueck').addEventListener('click', () => navigate(-1));
   document.getElementById('btn-weiter').addEventListener('click', () => navigate(1));
+  document.getElementById('arrow-prev').addEventListener('click', () => navigate(-1));
+  document.getElementById('arrow-next').addEventListener('click', () => navigate(1));
   document.getElementById('btn-cta-kalkulieren').addEventListener('click', () => navigate(1));
 
   document.getElementById('save-icon').addEventListener('click', downloadJSON);
@@ -997,6 +1057,7 @@ function wireGlobalControls() {
 function boot() {
   loadStateFromSession();
   if (!state.ui) state.ui = { currentSlide: 'titel' };
+  if (!state.ui.ablaufErledigt) state.ui.ablaufErledigt = [];
   renderStaticContent();
   bindAddressFields();
   wireSystemSlides();
