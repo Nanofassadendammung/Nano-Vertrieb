@@ -410,6 +410,9 @@ function renderStaticContent() {
   document.getElementById('claim-headline').textContent = TEXTS.claimHeadline;
   document.getElementById('claim-subtitle').textContent = TEXTS.claimSubtitle;
 
+  document.getElementById('berater-info').innerHTML =
+    `Ihr Berater: <strong>${BERATER.name}</strong> · Tel. <a href="tel:+49${BERATER.telefon.replace(/\D/g, '').replace(/^0/, '')}">${BERATER.telefon}</a> · <a href="mailto:${BERATER.email}">${BERATER.email}</a>`;
+
   // Problem-Cards
   const problemEl = document.getElementById('problem-cards');
   problemEl.innerHTML = TEXTS.problem

@@ -361,6 +361,14 @@ button {
   gap: var(--space-5);
   margin-bottom: var(--space-6);
 }
+.berater-line {
+  margin-top: calc(var(--space-6) * -1 + var(--space-2));
+  font-size: 13px;
+}
+.berater-line a {
+  color: var(--nano-blue);
+}
+
 .brand-row img {
   height: 40px;
   width: auto;

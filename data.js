@@ -230,6 +230,13 @@ const KENNDATEN = {
   gewaehrleistungJahre: 5,
 };
 
+// Ansprechpartner (Slide 1), lt. Musterangebot Q-00017 / Vertriebshinweise.
+const BERATER = {
+  name: 'Markus Schlegel',
+  telefon: '02821 786 99-85',
+  email: 'M.Schlegel@mkm-int.de',
+};
+
 // U-Wert-Vergleich, Q-00017 Seite 6.
 const UWERT_VERGLEICH = [
   { label: 'Beton (20 cm)', wert: 2.5 },
