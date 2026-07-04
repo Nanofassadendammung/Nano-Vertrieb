@@ -273,37 +273,45 @@ const TEXTS = {
     {
       titel: 'CO₂ & Entsorgung',
       text: 'Nur ca. 8–12 % des CO₂-Fußabdrucks eines klassischen WDVS. Reste sind unbedenklich und können über den Hausmüll entsorgt werden.',
+      icon: 'assets/icons/vorteile-co2.png',
     },
     {
       titel: 'Chemisch- & UV-beständig',
       text: 'Widersteht Witterung, UV-Strahlung und chemischen Einflüssen dauerhaft, ohne an Farbe oder Funktion zu verlieren.',
+      icon: 'assets/icons/vorteile-chemisch-uv.png',
     },
     {
       titel: 'Weniger Schimmelrisiko',
       text: 'Bessere Feuchtigkeitsregulierung als klassische Dämmmethoden – im Prüfgutachten nachgewiesen.',
+      icon: 'assets/icons/vorteile-schimmel.png',
     },
     {
       titel: 'Im Vergleich zu anderen Dämmverfahren',
       text: 'Meist ohne Gerüst und Baugenehmigung, kein Schießscharten-Effekt an Fenstern und Türen, Balkone bleiben in voller Größe erhalten.',
+      icon: 'assets/icons/vorteile-vergleich.png',
     },
   ],
   qualitaet: [
     {
       titel: 'Farbliche Gestaltung',
       text: 'Erhältlich in allen hellen Farbtönen – ein nachträgliches Streichen der Fassade entfällt.',
+      icon: 'assets/icons/qualitaet-farbe.png',
     },
     {
       titel: 'Förderung',
       text: 'Über unser Energieberater-Netzwerk ist eine Förderung von 15–20 % möglich (BAFA/BEG, individueller Sanierungsfahrplan).',
       accent: 'green',
+      icon: 'assets/icons/qualitaet-foerderung.png',
     },
     {
       titel: 'CE-Kennzeichnung',
       text: 'EU-weite bauaufsichtliche Zulassung auf Basis der Europäischen Technischen Bewertung (ETA) – geht über die deutsche bauaufsichtliche Zulassung hinaus.',
+      icon: 'assets/icons/qualitaet-ce.png',
     },
     {
       titel: 'Mögliche Untergründe',
       text: 'Holz, Klinker, Stein, Putz, Metall, viele Kunststoffe und Bitumen – nahezu jede Oberfläche lässt sich beschichten.',
+      icon: 'assets/icons/qualitaet-untergrund.png',
     },
   ],
   // Prozessschritte für die Ablauf-Timeline (Slide 6). Jeder Kreis ist anklickbar und lässt

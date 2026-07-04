@@ -421,9 +421,9 @@ button {
 }
 
 .problem-card__icon {
-  width: 76px;
+  width: 152px;
   height: auto;
-  margin-bottom: var(--space-3);
+  margin: 0 auto var(--space-3);
 }
 
 .plain-list {

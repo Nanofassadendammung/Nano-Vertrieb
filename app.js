@@ -424,12 +424,24 @@ function renderStaticContent() {
 
   // Weitere Vorteile (Slide 4a)
   document.getElementById('vorteile-cards').innerHTML = TEXTS.vorteile
-    .map((v) => `<div class="card"><h3>${v.titel}</h3><p class="muted">${v.text}</p></div>`)
+    .map(
+      (v) => `<div class="card">
+        <img src="${v.icon}" alt="" class="problem-card__icon" />
+        <h3>${v.titel}</h3>
+        <p class="muted">${v.text}</p>
+      </div>`
+    )
     .join('');
 
   // Qualität & Förderung (Slide 4b)
   document.getElementById('qualitaet-cards').innerHTML = TEXTS.qualitaet
-    .map((q) => `<div class="card${q.accent === 'green' ? ' card--green' : ''}"><h3>${q.titel}</h3><p class="muted">${q.text}</p></div>`)
+    .map(
+      (q) => `<div class="card${q.accent === 'green' ? ' card--green' : ''}">
+        <img src="${q.icon}" alt="" class="problem-card__icon" />
+        <h3>${q.titel}</h3>
+        <p class="muted">${q.text}</p>
+      </div>`
+    )
     .join('');
 
 // Kenndaten-Grid (Slide 3)
